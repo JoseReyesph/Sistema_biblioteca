@@ -1,0 +1,279 @@
+/*
+ Navicat Premium Data Transfer
+
+ Source Server         : localhost
+ Source Server Type    : MySQL
+ Source Server Version : 80403 (8.4.3)
+ Source Host           : localhost:3306
+ Source Schema         : sistema_biblioteca
+
+ Target Server Type    : MySQL
+ Target Server Version : 80403 (8.4.3)
+ File Encoding         : 65001
+
+ Date: 25/06/2026 10:18:54
+*/
+
+SET NAMES utf8mb4;
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for autores
+-- ----------------------------
+DROP TABLE IF EXISTS `autores`;
+CREATE TABLE `autores`  (
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `alias` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `nombre_completo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `nacionalidad` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `fecha_nacimiento` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `created_at` date NOT NULL,
+  `estado` enum('activo','inactivo') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'activo',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `unique`(`alias` ASC) USING BTREE,
+  INDEX `id`(`id` ASC) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of autores
+-- ----------------------------
+INSERT INTO `autores` VALUES (1, 'Miguel de Cervantes', 'Miguel de Cervantes', 'Española', '29-09-1547', '2026-06-22', 'activo');
+INSERT INTO `autores` VALUES (2, 'Marquez', 'Gabriel García Márquez', 'Colombiano', '6-03-1927', '2026-06-22', 'activo');
+INSERT INTO `autores` VALUES (3, 'Jason Ayala', 'Jason Ayala crack', 'La Union', '2026-06-22', '2026-06-23', 'activo');
+INSERT INTO `autores` VALUES (5, 'Pepe', 'Pepe Cruz', 'Español', '2026-06-30', '2026-06-24', 'activo');
+
+-- ----------------------------
+-- Table structure for categorias
+-- ----------------------------
+DROP TABLE IF EXISTS `categorias`;
+CREATE TABLE `categorias`  (
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `nombre_categoria` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `descripcion` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `created_at` date NOT NULL,
+  `updated_at` date NOT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `unique`(`nombre_categoria` ASC) USING BTREE,
+  INDEX `id`(`id` ASC) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of categorias
+-- ----------------------------
+INSERT INTO `categorias` VALUES (1, 'Novela', 'pruebas', '2026-06-22', '2026-06-22');
+INSERT INTO `categorias` VALUES (2, 'Novela de Aventuras', 'pruebas', '2026-06-22', '2026-06-22');
+INSERT INTO `categorias` VALUES (3, 'Novela de caballerias', 'pruebas', '2026-06-22', '2026-06-22');
+INSERT INTO `categorias` VALUES (4, 'Realismo mágico', 'pruebas', '2026-06-22', '2026-06-22');
+INSERT INTO `categorias` VALUES (5, 'accion', 'pruebas', '2026-06-23', '2026-06-23');
+INSERT INTO `categorias` VALUES (6, 'Romance', 'pruebas', '2026-06-24', '2026-06-24');
+
+-- ----------------------------
+-- Table structure for copias_libros
+-- ----------------------------
+DROP TABLE IF EXISTS `copias_libros`;
+CREATE TABLE `copias_libros`  (
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `libro_id` int UNSIGNED NOT NULL,
+  `estado` enum('dañado','prestado','disponible','reservado') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'disponible',
+  `fecha_adquisicion` date NOT NULL,
+  `ubicacion` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `fk_libro`(`libro_id` ASC) USING BTREE,
+  CONSTRAINT `fk_libro` FOREIGN KEY (`libro_id`) REFERENCES `libros` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of copias_libros
+-- ----------------------------
+INSERT INTO `copias_libros` VALUES (1, 5, 'disponible', '2026-06-24', '1B');
+INSERT INTO `copias_libros` VALUES (2, 5, 'disponible', '2026-06-24', '7B');
+INSERT INTO `copias_libros` VALUES (3, 5, 'prestado', '2026-06-24', '9B');
+INSERT INTO `copias_libros` VALUES (4, 5, 'reservado', '2026-06-24', '10B');
+INSERT INTO `copias_libros` VALUES (5, 5, 'dañado', '2026-06-24', 'BODEGA');
+INSERT INTO `copias_libros` VALUES (9, 6, 'disponible', '2026-06-24', 'A10');
+INSERT INTO `copias_libros` VALUES (10, 6, 'disponible', '2026-06-25', 'A14');
+INSERT INTO `copias_libros` VALUES (11, 7, 'disponible', '2026-06-25', 'C14');
+
+-- ----------------------------
+-- Table structure for editoriales
+-- ----------------------------
+DROP TABLE IF EXISTS `editoriales`;
+CREATE TABLE `editoriales`  (
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `pais` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `telefono` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `estado` enum('activo','inactivo') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'activo',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `unique`(`email` ASC) USING BTREE,
+  INDEX `id`(`id` ASC) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of editoriales
+-- ----------------------------
+INSERT INTO `editoriales` VALUES (1, 'EditorialSudamericana', 'Argentina', 'prueba@gmail.com', '1234-5678', 'activo');
+INSERT INTO `editoriales` VALUES (2, 'Juan de la Cuesta', 'Española', 'prueba2@gmail.com', '1234-5678', 'activo');
+INSERT INTO `editoriales` VALUES (3, 'Alelibros', 'La Union', 'libro@gmail.com', '1234-0967', 'activo');
+INSERT INTO `editoriales` VALUES (4, 'Bryanlibros', 'El Salvador', 'Bryanl@gmail.com', '4121-2134', 'activo');
+
+-- ----------------------------
+-- Table structure for estudiantes
+-- ----------------------------
+DROP TABLE IF EXISTS `estudiantes`;
+CREATE TABLE `estudiantes`  (
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `carnet_estudiante` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `nombre` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `telefono` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `created_at` date NOT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `unique`(`carnet_estudiante` ASC) USING BTREE,
+  INDEX `id`(`id` ASC, `telefono` ASC, `email` ASC) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of estudiantes
+-- ----------------------------
+INSERT INTO `estudiantes` VALUES (2, 'E1235', 'Jason Ayala', '1234-6790', 'Jason@gmail.com', '2026-06-22');
+INSERT INTO `estudiantes` VALUES (3, 'E0971', 'Julian Alexander', '7647-2341', 'julian@gmail.com', '2026-06-24');
+
+-- ----------------------------
+-- Table structure for libros
+-- ----------------------------
+DROP TABLE IF EXISTS `libros`;
+CREATE TABLE `libros`  (
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `titulo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `autor_id` int UNSIGNED NOT NULL,
+  `editorial_id` int UNSIGNED NOT NULL,
+  `anio_publicacion` date NOT NULL,
+  `idioma` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `descripcion` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `calificacion` int NOT NULL DEFAULT 0,
+  `cantidad_prestamos` int NOT NULL DEFAULT 0,
+  `created_at` date NOT NULL,
+  `updated_at` date NOT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `unique`(`titulo` ASC) USING BTREE,
+  INDEX `id`(`id` ASC) USING BTREE,
+  INDEX `fk_editorial`(`editorial_id` ASC) USING BTREE,
+  INDEX `fk_autor`(`autor_id` ASC) USING BTREE,
+  CONSTRAINT `fk_autor` FOREIGN KEY (`autor_id`) REFERENCES `autores` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `fk_editorial` FOREIGN KEY (`editorial_id`) REFERENCES `editoriales` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of libros
+-- ----------------------------
+INSERT INTO `libros` VALUES (5, 'Las flipantes venturas de Misisfu', 3, 3, '2026-06-24', 'Español', 'pruebas', 44, 5, '2026-06-24', '2026-06-24');
+INSERT INTO `libros` VALUES (6, 'libro de la selva', 3, 3, '2026-01-05', 'Español', 'pruebas', 10, 1, '2026-06-24', '2026-06-24');
+INSERT INTO `libros` VALUES (7, 'Don quijote de la mancha', 5, 4, '2026-06-02', 'Español', 'pruebas', 0, 0, '2026-06-25', '2026-06-25');
+
+-- ----------------------------
+-- Table structure for libros_categorias
+-- ----------------------------
+DROP TABLE IF EXISTS `libros_categorias`;
+CREATE TABLE `libros_categorias`  (
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `libro_id` int UNSIGNED NOT NULL,
+  `categoria_id` int UNSIGNED NOT NULL,
+  `tipo` enum('principal','secundaria') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `fk_libro_categoria`(`libro_id` ASC) USING BTREE,
+  INDEX `fk_categoria_libro`(`categoria_id` ASC) USING BTREE,
+  CONSTRAINT `fk_categoria_libro` FOREIGN KEY (`categoria_id`) REFERENCES `categorias` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `fk_libro_categoria` FOREIGN KEY (`libro_id`) REFERENCES `libros` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of libros_categorias
+-- ----------------------------
+INSERT INTO `libros_categorias` VALUES (1, 5, 5, 'principal');
+INSERT INTO `libros_categorias` VALUES (2, 5, 4, 'secundaria');
+INSERT INTO `libros_categorias` VALUES (5, 6, 4, 'principal');
+INSERT INTO `libros_categorias` VALUES (6, 7, 3, 'principal');
+
+-- ----------------------------
+-- Table structure for multa
+-- ----------------------------
+DROP TABLE IF EXISTS `multa`;
+CREATE TABLE `multa`  (
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `prestamo_id` int UNSIGNED NOT NULL,
+  `monto` double(10, 2) NOT NULL,
+  `motivo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `fecha_pago` date NOT NULL,
+  `estado` enum('pagado','debe') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `fk_prestamo`(`prestamo_id` ASC) USING BTREE,
+  CONSTRAINT `fk_prestamo` FOREIGN KEY (`prestamo_id`) REFERENCES `prestamos` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of multa
+-- ----------------------------
+INSERT INTO `multa` VALUES (1, 2, 1.00, 'Retraso de 1 día(s) en la entrega del libro.', '2026-06-25', 'pagado');
+INSERT INTO `multa` VALUES (2, 4, 5.00, 'Retraso de 5 día(s) en la entrega del libro.', '2026-06-25', 'pagado');
+INSERT INTO `multa` VALUES (3, 6, 10.00, 'Retraso de 10 día(s) en la entrega del libro.', '2026-06-25', 'pagado');
+
+-- ----------------------------
+-- Table structure for prestamos
+-- ----------------------------
+DROP TABLE IF EXISTS `prestamos`;
+CREATE TABLE `prestamos`  (
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `copia_id` int UNSIGNED NOT NULL,
+  `fecha_prestamo` date NOT NULL,
+  `fecha_limite` date NOT NULL,
+  `estudiante_id` int UNSIGNED NOT NULL,
+  `user_id` int UNSIGNED NOT NULL,
+  `fecha_devolucion` date NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `fk_estudiante`(`estudiante_id` ASC) USING BTREE,
+  INDEX `fk_users`(`user_id` ASC) USING BTREE,
+  INDEX `fk_prestamos_copia`(`copia_id` ASC) USING BTREE,
+  CONSTRAINT `fk_estudiante` FOREIGN KEY (`estudiante_id`) REFERENCES `estudiantes` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `fk_prestamos_copia` FOREIGN KEY (`copia_id`) REFERENCES `copias_libros` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `fk_users` FOREIGN KEY (`user_id`) REFERENCES `usuarios` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of prestamos
+-- ----------------------------
+INSERT INTO `prestamos` VALUES (1, 2, '2026-06-24', '2026-06-30', 2, 1, '2026-06-25');
+INSERT INTO `prestamos` VALUES (2, 2, '2026-06-25', '2026-06-30', 2, 1, '2026-06-25');
+INSERT INTO `prestamos` VALUES (3, 1, '2026-06-25', '2026-06-30', 2, 1, '2026-06-25');
+INSERT INTO `prestamos` VALUES (4, 2, '2026-06-25', '2026-06-30', 2, 1, '2026-06-25');
+INSERT INTO `prestamos` VALUES (5, 10, '2026-06-25', '2026-06-30', 2, 1, '2026-06-25');
+INSERT INTO `prestamos` VALUES (6, 2, '2026-06-25', '2026-06-30', 2, 1, '2026-06-25');
+
+-- ----------------------------
+-- Table structure for usuarios
+-- ----------------------------
+DROP TABLE IF EXISTS `usuarios`;
+CREATE TABLE `usuarios`  (
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `user_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `rol` enum('administrador','gestion','usuario') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'usuario',
+  `created_at` date NOT NULL,
+  `estado` enum('activo','inactivo') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'activo',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `unique`(`user_name` ASC, `email` ASC) USING BTREE,
+  INDEX `id`(`id` ASC) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of usuarios
+-- ----------------------------
+INSERT INTO `usuarios` VALUES (1, 'Ale', 'alejandro@gmail.com', 'admin', 'administrador', '2026-06-14', 'activo');
+INSERT INTO `usuarios` VALUES (2, 'Esau', 'esau@gmail.com', 'admin', 'gestion', '2026-06-14', 'inactivo');
+INSERT INTO `usuarios` VALUES (3, 'Bryan', 'bryan@gmail.com', 'admin', 'usuario', '2026-06-14', 'inactivo');
+INSERT INTO `usuarios` VALUES (4, 'Cuchumbo de agua', 'agua@gmail.com', 'admin', 'gestion', '2026-06-23', 'activo');
+INSERT INTO `usuarios` VALUES (5, 'Mariana', 'mariana@gmail.com', 'admin', 'gestion', '2026-06-24', 'inactivo');
+
+SET FOREIGN_KEY_CHECKS = 1;
